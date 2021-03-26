@@ -13,6 +13,7 @@ export interface RestDetailedProfileResponse {
   linkedin_page_url: string | null
   telegram_page_url: string | null
   phone: RestPhoneNumber
+  certified: boolean
 }
 
 export interface RestPostAddress {

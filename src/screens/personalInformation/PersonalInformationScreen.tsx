@@ -41,12 +41,14 @@ import { PersonalInformationsFormMapper } from '../../core/mapper/PersonalInform
 
 type ContentProps = Readonly<{
   profileUuid: string
+  isCertified: boolean
   initialForm: PersonalInformationsForm
   navigation: StackNavigationProp<ProfileParamList, 'PersonalInformation'>
 }>
 
 const PersonalInformationScreenContent: FC<ContentProps> = ({
   profileUuid,
+  isCertified,
   initialForm,
   navigation,
 }) => {
@@ -61,7 +63,6 @@ const PersonalInformationScreenContent: FC<ContentProps> = ({
   const twitterRef = useRef<TextInput>(null)
   const telegramRef = useRef<TextInput>(null)
   const styles = useThemedStyles(stylesFactory)
-  const isCertified = false
 
   const getError = (violations: Array<FormViolation>, path: string): string => {
     return violations
@@ -343,6 +344,7 @@ const PersonalInformationScreen = ({
         return (
           <PersonalInformationScreenContent
             profileUuid={detailedProfile.uuid}
+            isCertified={detailedProfile.isCertified}
             navigation={navigation}
             initialForm={form}
           />

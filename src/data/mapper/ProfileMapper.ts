@@ -50,6 +50,7 @@ export const ProfileMapper = {
       twitter: result.twitter_page_url ?? undefined,
       telegram: result.telegram_page_url ?? undefined,
       phone: phoneNumber(result.phone),
+      isCertified: result.certified,
     }
   },
 }

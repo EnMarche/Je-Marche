@@ -3,6 +3,7 @@ import { Gender } from './UserProfile'
 
 export interface DetailedProfile {
   uuid: string
+  isCertified: boolean
   firstName: string
   lastName: string
   gender: Gender
