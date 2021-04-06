@@ -2,9 +2,22 @@ import AuthenticationRepository from '../../data/AuthenticationRepository'
 import ProfileRepository from '../../data/ProfileRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 
-export class AnonymousLoginInteractor {
-  private authenticationRepository = AuthenticationRepository.getInstance()
-  private profileRepository = ProfileRepository.getInstance()
+export interface AnonymousLoginInteractor {
+  login(zipCode: string): Promise<void>
+}
+
+export class AnonymousLoginInteractorImplementation
+  implements AnonymousLoginInteractor {
+  private authenticationRepository: AuthenticationRepository
+  private profileRepository: ProfileRepository
+
+  constructor(
+    authenticationRepository: AuthenticationRepository,
+    profileRepository: ProfileRepository,
+  ) {
+    this.authenticationRepository = authenticationRepository
+    this.profileRepository = profileRepository
+  }
 
   public async login(zipCode: string): Promise<void> {
     await this.authenticationRepository.anonymousLogin()

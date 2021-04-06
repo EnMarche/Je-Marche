@@ -5,10 +5,24 @@ import ProfileRepository from '../../data/ProfileRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import { Poll } from '../entities/Poll'
 
-export class GetPollsInteractor {
-  private pollsRepository = PollsRepository.getInstance()
-  private profileRepository = ProfileRepository.getInstance()
-  private authenticationRepository = AuthenticationRepository.getInstance()
+export interface GetPollsInteractor {
+  execute(dataSource: DataSource): Promise<Array<Poll>>
+}
+
+export class GetPollsInteractorImplementation implements GetPollsInteractor {
+  private pollsRepository: PollsRepository
+  private profileRepository: ProfileRepository
+  private authenticationRepository: AuthenticationRepository
+
+  constructor(
+    pollsRepository: PollsRepository,
+    profileRepository: ProfileRepository,
+    authenticationRepository: AuthenticationRepository,
+  ) {
+    this.pollsRepository = pollsRepository
+    this.profileRepository = profileRepository
+    this.authenticationRepository = authenticationRepository
+  }
 
   public async execute(
     dataSource: DataSource = 'remote',

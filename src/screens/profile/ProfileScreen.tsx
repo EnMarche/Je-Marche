@@ -10,13 +10,13 @@ import { Screen } from '../../navigation'
 import ProfileAuthenticated from './ProfileAuthenticated'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
 import {
-  GetUserProfileInteractor,
   GetUserProfileInteractorResult,
   ProfileAnonymousResult,
   ProfileAuthenticatedResult,
 } from '../../core/interactor/GetUserProfileInteractor'
 import { ProfileScreenViewModelMapper } from './ProfileScreenViewModelMapper'
 import { ServerTimeoutError } from '../../core/errors'
+import { DependencyProvider } from '../../di/DependencyProvider'
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [statefulState, setStatefulState] = useState<
@@ -73,7 +73,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      const getProfileInteractor = new GetUserProfileInteractor()
+      const getProfileInteractor = DependencyProvider.sharedInstance().makeGetUserProfileInteractor()
       const remoteDataFetch = (cacheJustLoaded: boolean = false) => {
         getProfileInteractor
           .execute('remote')

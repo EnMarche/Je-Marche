@@ -8,10 +8,10 @@ import { Colors, Spacing, Typography } from '../../styles'
 import { BorderlessButton, PrimaryButton } from '../shared/Buttons'
 import LabelTextInput from '../shared/LabelTextInput'
 import LoadingOverlay from '../shared/LoadingOverlay'
-import { LoginInteractor } from '../../core/interactor/LoginInteractor'
 import RegionTheme from '../../core/entities/RegionTheme'
 import { useTheme } from '../../themes'
 import { ExternalLink } from '../shared/ExternalLink'
+import { DependencyProvider } from '../../di/DependencyProvider'
 
 type Props = Readonly<{
   onSuccess?: () => void
@@ -39,7 +39,8 @@ const LoginScreen: FC<Props> = ({ onSuccess }) => {
     setLoading(true)
     setEmailErrorMessage(undefined)
     setPasswordErrorMessage(undefined)
-    new LoginInteractor()
+    const loginInteractor = DependencyProvider.sharedInstance().makeLoginInteractor()
+    loginInteractor
       .login(email, password)
       .then((theme: RegionTheme) => {
         setTheme(theme)

@@ -24,10 +24,25 @@ export type GetUserProfileInteractorResult =
   | ProfileAnonymousResult
   | ProfileAuthenticatedResult
 
-export class GetUserProfileInteractor {
-  private profileRepository = ProfileRepository.getInstance()
-  private regionRepository = RegionsRepository.getInstance()
-  private authenticationRepository = AuthenticationRepository.getInstance()
+export interface GetUserProfileInteractor {
+  execute(dataSource: DataSource): Promise<GetUserProfileInteractorResult>
+}
+
+export class GetUserProfileInteractorImplementation
+  implements GetUserProfileInteractor {
+  private profileRepository: ProfileRepository
+  private regionRepository: RegionsRepository
+  private authenticationRepository: AuthenticationRepository
+
+  constructor(
+    profileRepository: ProfileRepository,
+    regionRepository: RegionsRepository,
+    authenticationRepository: AuthenticationRepository,
+  ) {
+    this.profileRepository = profileRepository
+    this.regionRepository = regionRepository
+    this.authenticationRepository = authenticationRepository
+  }
 
   public async execute(
     dataSource: DataSource,

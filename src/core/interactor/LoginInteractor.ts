@@ -5,11 +5,27 @@ import ThemeRepository from '../../data/ThemeRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import RegionTheme from '../entities/RegionTheme'
 
-export class LoginInteractor {
-  private authenticationRepository = AuthenticationRepository.getInstance()
-  private profileRepository = ProfileRepository.getInstance()
-  private regionsRepository = RegionsRepository.getInstance()
-  private themeRepository = ThemeRepository.getInstance()
+export interface LoginInteractor {
+  login(email: string, password: string): Promise<RegionTheme>
+}
+
+export class LoginInteractorImplementation implements LoginInteractor {
+  private authenticationRepository: AuthenticationRepository
+  private profileRepository: ProfileRepository
+  private regionsRepository: RegionsRepository
+  private themeRepository: ThemeRepository
+
+  constructor(
+    authenticationRepository: AuthenticationRepository,
+    profileRepository: ProfileRepository,
+    regionsRepository: RegionsRepository,
+    themeRepository: ThemeRepository,
+  ) {
+    this.authenticationRepository = authenticationRepository
+    this.profileRepository = profileRepository
+    this.regionsRepository = regionsRepository
+    this.themeRepository = themeRepository
+  }
 
   public async login(email: string, password: string): Promise<RegionTheme> {
     await this.authenticationRepository.login(email, password)
