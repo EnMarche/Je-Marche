@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, FlatList, ListRenderItemInfo } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { Tool } from '../../core/entities/Tool'
-import ToolsRepository from '../../data/ToolsRepository'
 import { Colors, Spacing, Typography } from '../../styles'
 import i18n from '../../utils/i18n'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
@@ -12,6 +11,7 @@ import { ToolRowViewModel } from './ToolRowViewModel'
 import { ToolRowViewModelMapper } from './ToolRowViewModelMapper'
 import { useTheme } from '../../themes'
 import { ExternalLink } from '../shared/ExternalLink'
+import { toolsRepository } from '../../di/DependencyProvider'
 
 const ToolsScreen = () => {
   const [statefulState, setStatefulState] = useState<
@@ -22,7 +22,7 @@ const ToolsScreen = () => {
   const [fetchedTools] = useState(new Map<number, Tool>())
   const fetch = () => {
     setStatefulState(new ViewState.Loading())
-    ToolsRepository.getInstance()
+    toolsRepository
       .getTools()
       .then((tools) => {
         fetchedTools.clear()

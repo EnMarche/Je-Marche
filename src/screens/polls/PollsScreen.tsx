@@ -20,9 +20,9 @@ import { StatefulView, ViewState } from '../shared/StatefulView'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
 import { PollsScreenViewModel } from './PollsScreenViewModel'
 import { useTheme } from '../../themes'
-import { GetPollsInteractor } from '../../core/interactor/GetPollsInteractor'
 import { ServerTimeoutError } from '../../core/errors'
 import { useFocusEffect } from '@react-navigation/native'
+import { makeGetPollsInteractor } from '../../di/DependencyProvider'
 
 const PollsScreen = ({ navigation }: PollsScreenProps) => {
   const { theme } = useTheme()
@@ -35,7 +35,7 @@ const PollsScreen = ({ navigation }: PollsScreenProps) => {
   const fetchData = useCallback(
     (cacheJustLoaded: boolean = false) => {
       setRefreshing(true)
-      return new GetPollsInteractor()
+      return makeGetPollsInteractor()
         .execute('remote')
         .then((polls) => {
           const viewModel = PollsScreenViewModelMapper.map(theme, polls)
@@ -62,7 +62,7 @@ const PollsScreen = ({ navigation }: PollsScreenProps) => {
   )
 
   const firstDataFetch = useCallback(() => {
-    new GetPollsInteractor()
+    makeGetPollsInteractor()
       .execute('cache')
       .then((cachedPolls) => {
         const viewModel = PollsScreenViewModelMapper.map(theme, cachedPolls)

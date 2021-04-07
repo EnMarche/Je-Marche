@@ -53,7 +53,7 @@ const cacheManager = CacheManager.getInstance()
 const localStore = LocalStore.getInstance()
 
 // Repositories
-const toolsRepository: ToolsRepository = new ToolsRepositoryImplementation()
+export const toolsRepository: ToolsRepository = new ToolsRepositoryImplementation()
 const quickPollRepository: QuickPollRepository = new QuickPollRepositoryImplementation(
   apiService,
   cacheManager,
@@ -151,4 +151,8 @@ export const makeLoginInteractor = () => {
 
 export const makeAnonymousLoginInteractor = () => {
   return anonymousLoginInteractorFactory.makeInstance()
+}
+
+export const makeGetPollsInteractor = () => {
+  return getPollsInteractorFactory.makeInstance()
 }

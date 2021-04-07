@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import { Tool } from '../../core/entities/Tool'
-import ToolsRepository from '../../data/ToolsRepository'
+import { toolsRepository } from '../../di/DependencyProvider'
 import { Colors, Spacing, Typography } from '../../styles'
 import i18n from '../../utils/i18n'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
@@ -20,7 +20,7 @@ const PollDetailTools = () => {
 
   const fetch = () => {
     setStatefulState(new ViewState.Loading())
-    ToolsRepository.getInstance()
+    toolsRepository
       .getTools()
       .then((tools) => {
         setStatefulState(new ViewState.Content(tools))
