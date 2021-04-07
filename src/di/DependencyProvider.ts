@@ -12,7 +12,10 @@ import {
   ProfileRepository,
   ProfileRepositoryImplementation,
 } from '../data/ProfileRepository'
-import PushRepository from '../data/PushRepository'
+import {
+  PushRepository,
+  PushRepositoryImplementation,
+} from '../data/PushRepository'
 import {
   QuickPollRepository,
   QuickPollRepositoryImplementation,
@@ -58,7 +61,9 @@ export const profileRepository: ProfileRepository = new ProfileRepositoryImpleme
   localStore,
   cacheManager,
 )
-export const pushRepository: PushRepository = PushRepository.getInstance()
+export const pushRepository: PushRepository = new PushRepositoryImplementation(
+  localStore,
+)
 export const authenticationRepository: AuthenticationRepository = new AuthenticationRepositoryImplementation(
   oauthApiService,
   localStore,
@@ -86,6 +91,7 @@ const getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
   profileRepository,
   authenticationRepository,
   regionsRepository,
+  pushRepository,
   getQuickPollInteractorFactory,
   getPollsInteractorFactory,
 )

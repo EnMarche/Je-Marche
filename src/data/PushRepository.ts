@@ -4,10 +4,19 @@ import { Department } from '../core/entities/Department'
 import { Region } from '../core/entities/Region'
 import LocalStore from './store/LocalStore'
 
-class PushRepository {
-  private static instance: PushRepository
-  private localStore = LocalStore.getInstance()
-  private constructor() {}
+export interface PushRepository {
+  subscribeToGeneralTopic(): Promise<void>
+  subscribeToDepartment(department: Department): Promise<void>
+  subscribeToRegion(region: Region): Promise<void>
+  invalidatePushToken(): Promise<void>
+}
+
+export class PushRepositoryImplementation implements PushRepository {
+  private localStore: LocalStore
+
+  constructor(localStore: LocalStore) {
+    this.localStore = localStore
+  }
 
   public async subscribeToGeneralTopic(): Promise<void> {
     const registrations = await this.localStore.getTopicsRegistration()
@@ -69,13 +78,4 @@ class PushRepository {
   private createTopicName(topic: string): string {
     return ENVIRONMENT + '_jemarche_' + topic
   }
-
-  public static getInstance(): PushRepository {
-    if (!PushRepository.instance) {
-      PushRepository.instance = new PushRepository()
-    }
-    return PushRepository.instance
-  }
 }
-
-export default PushRepository

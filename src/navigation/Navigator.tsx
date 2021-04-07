@@ -15,8 +15,10 @@ import { headerBlank } from '../styles/navigationAppearance'
 import { PushNotification } from '../utils/PushNotification'
 import DataCollectScreen from '../screens/authentication/DataCollectScreen'
 import { Analytics } from '../utils/Analytics'
-import PushRepository from '../data/PushRepository'
-import { authenticationRepository } from '../di/DependencyProvider'
+import {
+  authenticationRepository,
+  pushRepository,
+} from '../di/DependencyProvider'
 
 const RootStack = createStackNavigator<RootStackParamList>()
 const UnauthenticatedStack = createStackNavigator()
@@ -34,11 +36,9 @@ const Navigator: FunctionComponent = () => {
     } else {
       PushNotification.requestPermission()
       Analytics.enable()
-      PushRepository.getInstance()
-        .subscribeToGeneralTopic()
-        .catch((error) => {
-          console.log(error)
-        })
+      pushRepository.subscribeToGeneralTopic().catch((error) => {
+        console.log(error)
+      })
       setLoggedIn(true)
     }
     SplashScreen.hide()

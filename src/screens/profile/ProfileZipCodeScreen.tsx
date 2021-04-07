@@ -21,9 +21,8 @@ import { useValidateZipCode } from '../shared/useValidateZipCode'
 import { Department } from '../../core/entities/Department'
 import RegionTheme from '../../core/entities/RegionTheme'
 import ThemeRepository from '../../data/ThemeRepository'
-import PushRepository from '../../data/PushRepository'
 import LoadingOverlay from '../shared/LoadingOverlay'
-import { profileRepository } from '../../di/DependencyProvider'
+import { profileRepository, pushRepository } from '../../di/DependencyProvider'
 
 const ProfileZipCodeScreen: FC<ProfileZipCodeScreenProps> = ({
   navigation,
@@ -46,8 +45,8 @@ const ProfileZipCodeScreen: FC<ProfileZipCodeScreenProps> = ({
   const onSuccessZipCode = async (department: Department) => {
     await profileRepository.saveZipCode(zipCode)
     try {
-      await PushRepository.getInstance().subscribeToDepartment(department)
-      await PushRepository.getInstance().subscribeToRegion(department.region)
+      await pushRepository.subscribeToDepartment(department)
+      await pushRepository.subscribeToRegion(department.region)
     } catch (error) {
       //no-op
     }

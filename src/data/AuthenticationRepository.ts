@@ -5,7 +5,7 @@ import { RestLoginResponse } from './restObjects/RestLoginResponse'
 import { Credentials } from './store/Credentials'
 import LocalStore from './store/LocalStore'
 import iid from '@react-native-firebase/iid'
-import PushRepository from './PushRepository'
+import { PushRepository } from './PushRepository'
 import CacheManager from './store/CacheManager'
 
 export interface AuthenticationRepository {
