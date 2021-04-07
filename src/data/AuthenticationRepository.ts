@@ -8,13 +8,32 @@ import iid from '@react-native-firebase/iid'
 import PushRepository from './PushRepository'
 import CacheManager from './store/CacheManager'
 
-class AuthenticationRepository {
-  private static instance: AuthenticationRepository
-  private apiService = OAuthApiService.getInstance()
-  private localStore = LocalStore.getInstance()
-  private pushRepository = PushRepository.getInstance()
+export interface AuthenticationRepository {
+  stateListener?: (state: AuthenticationState) => void
+  getAuthenticationState(): Promise<AuthenticationState>
+  login(email: string, password: string): Promise<void>
+  anonymousLogin(): Promise<void>
+  refreshToken(refreshToken: string): Promise<void>
+  logout(): Promise<void>
+  dispatchState(state: AuthenticationState): void
+  getDeviceId(): Promise<string>
+}
 
-  private constructor() {}
+export class AuthenticationRepositoryImplementation
+  implements AuthenticationRepository {
+  private apiService: OAuthApiService
+  private localStore: LocalStore
+  private pushRepository: PushRepository
+
+  constructor(
+    apiService: OAuthApiService,
+    localStore: LocalStore,
+    pushRepository: PushRepository,
+  ) {
+    this.apiService = apiService
+    this.localStore = localStore
+    this.pushRepository = pushRepository
+  }
 
   public stateListener?: (state: AuthenticationState) => void
 
@@ -92,14 +111,4 @@ class AuthenticationRepository {
       refreshToken: result.refresh_token,
     }
   }
-
-  public static getInstance(): AuthenticationRepository {
-    if (!AuthenticationRepository.instance) {
-      AuthenticationRepository.instance = new AuthenticationRepository()
-    }
-
-    return AuthenticationRepository.instance
-  }
 }
-
-export default AuthenticationRepository

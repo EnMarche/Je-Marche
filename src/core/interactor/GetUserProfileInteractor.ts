@@ -1,6 +1,6 @@
-import AuthenticationRepository from '../../data/AuthenticationRepository'
+import { AuthenticationRepository } from '../../data/AuthenticationRepository'
 import { DataSource } from '../../data/DataSource'
-import ProfileRepository from '../../data/ProfileRepository'
+import { ProfileRepository } from '../../data/ProfileRepository'
 import RegionsRepository from '../../data/RegionsRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import { Department } from '../entities/Department'

@@ -2,7 +2,7 @@ import {
   GetUserProfileInteractor,
   GetUserProfileInteractorImplementation,
 } from '../core/interactor/GetUserProfileInteractor'
-import AuthenticationRepository from '../data/AuthenticationRepository'
+import { AuthenticationRepository } from '../data/AuthenticationRepository'
 import { ProfileRepository } from '../data/ProfileRepository'
 import RegionsRepository from '../data/RegionsRepository'
 

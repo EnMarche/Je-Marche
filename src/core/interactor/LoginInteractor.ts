@@ -1,5 +1,5 @@
-import AuthenticationRepository from '../../data/AuthenticationRepository'
-import ProfileRepository from '../../data/ProfileRepository'
+import { AuthenticationRepository } from '../../data/AuthenticationRepository'
+import { ProfileRepository } from '../../data/ProfileRepository'
 import RegionsRepository from '../../data/RegionsRepository'
 import ThemeRepository from '../../data/ThemeRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
@@ -30,7 +30,7 @@ export class LoginInteractorImplementation implements LoginInteractor {
   public async login(email: string, password: string): Promise<RegionTheme> {
     await this.authenticationRepository.login(email, password)
     try {
-      const profile = await this.profileRepository.getProfile()
+      const profile = await this.profileRepository.getProfile('remote')
       const zipCode = profile.zipCode
       const region = await this.regionsRepository.getRegion(zipCode)
       await this.themeRepository.saveRegionTheme(region.theme)

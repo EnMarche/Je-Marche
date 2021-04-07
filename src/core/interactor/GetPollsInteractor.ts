@@ -1,7 +1,7 @@
-import AuthenticationRepository from '../../data/AuthenticationRepository'
+import { AuthenticationRepository } from '../../data/AuthenticationRepository'
 import { DataSource } from '../../data/DataSource'
 import { PollsRepository } from '../../data/PollsRepository'
-import ProfileRepository from '../../data/ProfileRepository'
+import { ProfileRepository } from '../../data/ProfileRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import { Poll } from '../entities/Poll'
 

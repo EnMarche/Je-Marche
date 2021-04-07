@@ -1,5 +1,9 @@
-import AuthenticationRepository from '../data/AuthenticationRepository'
+import {
+  AuthenticationRepository,
+  AuthenticationRepositoryImplementation,
+} from '../data/AuthenticationRepository'
 import ApiService from '../data/network/ApiService'
+import OAuthApiService from '../data/network/OAuthApiService'
 import {
   PollsRepository,
   PollsRepositoryImplementation,
@@ -8,6 +12,7 @@ import {
   ProfileRepository,
   ProfileRepositoryImplementation,
 } from '../data/ProfileRepository'
+import PushRepository from '../data/PushRepository'
 import {
   QuickPollRepository,
   QuickPollRepositoryImplementation,
@@ -30,6 +35,7 @@ import { SaveQuickPollAsAnsweredInteractorFactory } from './SaveQuickPollAsAnswe
 
 // Helpers
 const apiService = ApiService.getInstance()
+const oauthApiService = OAuthApiService.getInstance()
 const cacheManager = CacheManager.getInstance()
 const localStore = LocalStore.getInstance()
 
@@ -49,7 +55,12 @@ export const profileRepository: ProfileRepository = new ProfileRepositoryImpleme
   localStore,
   cacheManager,
 )
-export const authenticationRepository = AuthenticationRepository.getInstance()
+export const pushRepository: PushRepository = PushRepository.getInstance()
+export const authenticationRepository: AuthenticationRepository = new AuthenticationRepositoryImplementation(
+  oauthApiService,
+  localStore,
+  pushRepository,
+)
 export const regionsRepository = RegionsRepository.getInstance()
 export const themeRepository = ThemeRepository.getInstance()
 
@@ -65,6 +76,7 @@ const getPollsInteractorFactory = new GetPollsInteractorFactory(
 const getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
   toolsRepository,
   profileRepository,
+  authenticationRepository,
   getQuickPollInteractorFactory,
   getPollsInteractorFactory,
 )

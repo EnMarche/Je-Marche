@@ -1,8 +1,8 @@
 import ky from 'ky'
 import { API_BASE_URL } from '../../Config'
 import LocalStore from '../store/LocalStore'
-import AuthenticationRepository from '../AuthenticationRepository'
 import { Mutex } from 'async-mutex'
+import { authenticationRepository } from '../../di/DependencyProvider'
 
 const injectAccessTokenHook = async (request: Request) => {
   const credentials = await LocalStore.getInstance().getCredentials()
@@ -30,11 +30,9 @@ const refreshToken = async (options: { request: Request }) => {
     }
 
     if (credentials.refreshToken) {
-      return AuthenticationRepository.getInstance().refreshToken(
-        credentials.refreshToken,
-      )
+      return authenticationRepository.refreshToken(credentials.refreshToken)
     } else {
-      return AuthenticationRepository.getInstance().anonymousLogin()
+      return authenticationRepository.anonymousLogin()
     }
   })
 }

@@ -13,7 +13,6 @@ import { Spacing, Typography } from '../../styles'
 import ProfilePollsCompleted from './ProfilePollsCompleted'
 import ProfileSettingsHeader from './ProfileSettingsHeader'
 import ProfileSettingsItem from './ProfileSettingsItem'
-import AuthenticationRepository from '../../data/AuthenticationRepository'
 import { PrimaryButton } from '../shared/Buttons'
 import i18n from '../../utils/i18n'
 import { ProfileScreenViewModel } from './ProfileScreenViewModel'
@@ -21,6 +20,7 @@ import { versionLabel } from './version'
 import { useTheme } from '../../themes'
 import { ExternalLink } from '../shared/ExternalLink'
 import ProfileSettingsCard from './ProfileSettingsCard'
+import { authenticationRepository } from '../../di/DependencyProvider'
 
 type Props = Readonly<{
   openPersonalInformation: () => void
@@ -43,7 +43,7 @@ const ProfileAuthenticated: FC<Props> = ({
         },
         {
           text: i18n.t('profile.alert.logout.confirm'),
-          onPress: () => AuthenticationRepository.getInstance().logout(),
+          onPress: () => authenticationRepository.logout(),
           style: 'destructive',
         },
       ],

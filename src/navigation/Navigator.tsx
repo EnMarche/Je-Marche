@@ -4,7 +4,6 @@ import { FunctionComponent } from 'react'
 import SplashScreen from 'react-native-splash-screen'
 import { RootStackParamList, Screen } from '.'
 import { AuthenticationState } from '../core/entities/AuthenticationState'
-import AuthenticationRepository from '../data/AuthenticationRepository'
 import AnonymousLoginZipCodeScreen from '../screens/authentication/AnonymousLoginZipCodeScreen'
 import LoginScreen from '../screens/authentication/LoginScreen'
 import TermsOfUseScreen from '../screens/authentication/TermsOfUseScreen'
@@ -17,10 +16,10 @@ import { PushNotification } from '../utils/PushNotification'
 import DataCollectScreen from '../screens/authentication/DataCollectScreen'
 import { Analytics } from '../utils/Analytics'
 import PushRepository from '../data/PushRepository'
+import { authenticationRepository } from '../di/DependencyProvider'
 
 const RootStack = createStackNavigator<RootStackParamList>()
 const UnauthenticatedStack = createStackNavigator()
-const authenticationRepository = AuthenticationRepository.getInstance()
 
 const Navigator: FunctionComponent = () => {
   const [isLoggedIn, setLoggedIn] = useState<boolean | undefined>(undefined)

@@ -1,5 +1,5 @@
-import AuthenticationRepository from '../../data/AuthenticationRepository'
-import ProfileRepository from '../../data/ProfileRepository'
+import { AuthenticationRepository } from '../../data/AuthenticationRepository'
+import { ProfileRepository } from '../../data/ProfileRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 
 export interface AnonymousLoginInteractor {
