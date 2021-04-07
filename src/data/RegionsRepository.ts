@@ -5,17 +5,36 @@ import ApiService from './network/ApiService'
 import { DepartmentMapper } from './mapper/DepartmentMapper'
 import OAuthApiService from './network/OAuthApiService'
 import { RestDepartmentResponse } from './restObjects/RestDepartmentResponse'
-import AuthenticationRepository from './AuthenticationRepository'
+import { AuthenticationRepository } from './AuthenticationRepository'
 import { DataSource } from './DataSource'
 import CacheManager from './store/CacheManager'
 
-class RegionsRepository {
-  private static instance: RegionsRepository
-  private oauthService = OAuthApiService.getInstance()
-  private authenticationRepository = AuthenticationRepository.getInstance()
-  private apiService = ApiService.getInstance()
-  private cacheManager = CacheManager.getInstance()
-  private constructor() {}
+export interface RegionsRepository {
+  getDepartment(
+    zipCode: string,
+    dataSource: DataSource,
+    mode: 'Anonymous' | 'Authenticated',
+  ): Promise<Department>
+  getRegion(zipCode: string, dataSource: DataSource): Promise<Region>
+}
+
+export class RegionsRepositoryImplementation implements RegionsRepository {
+  private oauthService: OAuthApiService
+  private authenticationRepository: AuthenticationRepository
+  private apiService: ApiService
+  private cacheManager: CacheManager
+
+  constructor(
+    oauthService: OAuthApiService,
+    authenticationRepository: AuthenticationRepository,
+    apiService: ApiService,
+    cacheManager: CacheManager,
+  ) {
+    this.oauthService = oauthService
+    this.authenticationRepository = authenticationRepository
+    this.apiService = apiService
+    this.cacheManager = cacheManager
+  }
 
   public async getDepartment(
     zipCode: string,
@@ -75,13 +94,4 @@ class RegionsRepository {
   ): Promise<Region> {
     return (await this.getDepartment(zipCode, dataSource)).region
   }
-
-  public static getInstance(): RegionsRepository {
-    if (!RegionsRepository.instance) {
-      RegionsRepository.instance = new RegionsRepository()
-    }
-    return RegionsRepository.instance
-  }
 }
-
-export default RegionsRepository

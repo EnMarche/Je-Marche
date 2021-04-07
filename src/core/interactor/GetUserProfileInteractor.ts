@@ -1,7 +1,7 @@
 import { AuthenticationRepository } from '../../data/AuthenticationRepository'
 import { DataSource } from '../../data/DataSource'
 import { ProfileRepository } from '../../data/ProfileRepository'
-import RegionsRepository from '../../data/RegionsRepository'
+import { RegionsRepository } from '../../data/RegionsRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import { Department } from '../entities/Department'
 import { Profile } from '../entities/Profile'
@@ -54,6 +54,7 @@ export class GetUserProfileInteractorImplementation
       const department = await this.regionRepository.getDepartment(
         zipCode,
         dataSource,
+        'Authenticated',
       )
       return new ProfileAnonymousResult(zipCode, department)
     } else {
@@ -61,6 +62,7 @@ export class GetUserProfileInteractorImplementation
       const department = await this.regionRepository.getDepartment(
         profile.zipCode,
         dataSource,
+        'Authenticated',
       )
       return new ProfileAuthenticatedResult(profile, department)
     }

@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Keyboard } from 'react-native'
 import { Department } from '../../core/entities/Department'
-
-import RegionsRepository from '../../data/RegionsRepository'
+import { regionsRepository } from '../../di/DependencyProvider'
 
 export function useValidateZipCode(
   onSuccess: (department: Department) => void,
@@ -17,11 +16,7 @@ export function useValidateZipCode(
 
   const validateExistence = useCallback(
     (value: string): Promise<Department> => {
-      return RegionsRepository.getInstance().getDepartment(
-        value,
-        'remote',
-        'Anonymous',
-      )
+      return regionsRepository.getDepartment(value, 'remote', 'Anonymous')
     },
     [],
   )

@@ -17,7 +17,10 @@ import {
   QuickPollRepository,
   QuickPollRepositoryImplementation,
 } from '../data/QuickPollRepository'
-import RegionsRepository from '../data/RegionsRepository'
+import {
+  RegionsRepository,
+  RegionsRepositoryImplementation,
+} from '../data/RegionsRepository'
 import CacheManager from '../data/store/CacheManager'
 import LocalStore from '../data/store/LocalStore'
 import ThemeRepository from '../data/ThemeRepository'
@@ -61,7 +64,12 @@ export const authenticationRepository: AuthenticationRepository = new Authentica
   localStore,
   pushRepository,
 )
-export const regionsRepository = RegionsRepository.getInstance()
+export const regionsRepository: RegionsRepository = new RegionsRepositoryImplementation(
+  oauthApiService,
+  authenticationRepository,
+  apiService,
+  cacheManager,
+)
 export const themeRepository = ThemeRepository.getInstance()
 
 // Interactor Factories
@@ -77,6 +85,7 @@ const getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
   toolsRepository,
   profileRepository,
   authenticationRepository,
+  regionsRepository,
   getQuickPollInteractorFactory,
   getPollsInteractorFactory,
 )

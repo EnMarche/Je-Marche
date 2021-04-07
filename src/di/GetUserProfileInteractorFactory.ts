@@ -4,7 +4,7 @@ import {
 } from '../core/interactor/GetUserProfileInteractor'
 import { AuthenticationRepository } from '../data/AuthenticationRepository'
 import { ProfileRepository } from '../data/ProfileRepository'
-import RegionsRepository from '../data/RegionsRepository'
+import { RegionsRepository } from '../data/RegionsRepository'
 
 export class GetUserProfileInteractorFactory {
   private profileRepository: ProfileRepository

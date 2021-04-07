@@ -7,7 +7,7 @@ import { Profile } from '../entities/Profile'
 import allSettled from 'promise.allsettled'
 import { ProfileRepository } from '../../data/ProfileRepository'
 import NewsRepository from '../../data/NewsRepository'
-import RegionsRepository from '../../data/RegionsRepository'
+import { RegionsRepository } from '../../data/RegionsRepository'
 import { ToolsRepository } from '../../data/ToolsRepository'
 import { AuthenticationRepository } from '../../data/AuthenticationRepository'
 import { GetPollsInteractor } from './GetPollsInteractor'
@@ -76,7 +76,11 @@ export class GetHomeResourcesInteractorImplementation
       state === AuthenticationState.Authenticated
         ? this.profileRepository.getProfile(dataSource)
         : undefined,
-      this.regionsRepository.getDepartment(zipCode, dataSource),
+      this.regionsRepository.getDepartment(
+        zipCode,
+        dataSource,
+        'Authenticated',
+      ),
       this.newsRepository.getLatestNews(zipCode, dataSource),
       this.getPollsInteractor.execute(dataSource),
       this.toolsRepository.getTools(),
@@ -92,6 +96,7 @@ export class GetHomeResourcesInteractorImplementation
               this.regionsRepository.getDepartment(
                 zipCode,
                 departmentDataSource,
+                'Authenticated',
               ),
             undefined,
           )

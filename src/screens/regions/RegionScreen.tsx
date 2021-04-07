@@ -1,8 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Image, StyleSheet, Text, View, ScrollView } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
-import RegionsRepository from '../../data/RegionsRepository'
-
 import { Colors, Spacing, Styles, Typography } from '../../styles'
 import i18n from '../../utils/i18n'
 import { PrimaryButton } from '../shared/Buttons'
@@ -12,6 +10,7 @@ import { RegionViewModel } from './RegionViewModel'
 import { RegionViewModelMapper } from './RegionViewModelMapper'
 import { RegionScreenProps } from '../../navigation'
 import { ExternalLink } from '../shared/ExternalLink'
+import { regionsRepository } from '../../di/DependencyProvider'
 
 type Props = Readonly<RegionScreenProps>
 
@@ -21,8 +20,8 @@ const RegionScreen: FC<Props> = ({ route }) => {
   >(new ViewState.Loading())
 
   const fetchData = () => {
-    RegionsRepository.getInstance()
-      .getRegion(route.params.zipCode)
+    regionsRepository
+      .getRegion(route.params.zipCode, 'remote')
       .then((result) => {
         if (result.campaign) {
           const viewModel = RegionViewModelMapper.map(

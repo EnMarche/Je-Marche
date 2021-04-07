@@ -1,6 +1,6 @@
 import { AuthenticationRepository } from '../../data/AuthenticationRepository'
 import { ProfileRepository } from '../../data/ProfileRepository'
-import RegionsRepository from '../../data/RegionsRepository'
+import { RegionsRepository } from '../../data/RegionsRepository'
 import ThemeRepository from '../../data/ThemeRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import RegionTheme from '../entities/RegionTheme'
@@ -32,7 +32,7 @@ export class LoginInteractorImplementation implements LoginInteractor {
     try {
       const profile = await this.profileRepository.getProfile('remote')
       const zipCode = profile.zipCode
-      const region = await this.regionsRepository.getRegion(zipCode)
+      const region = await this.regionsRepository.getRegion(zipCode, 'remote')
       await this.themeRepository.saveRegionTheme(region.theme)
       await this.profileRepository.saveZipCode(zipCode)
       this.authenticationRepository.dispatchState(

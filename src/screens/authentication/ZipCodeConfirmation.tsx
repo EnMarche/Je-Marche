@@ -2,8 +2,10 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import { Alert, Image, StyleSheet, Text } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { Department } from '../../core/entities/Department'
-import RegionsRepository from '../../data/RegionsRepository'
-import { makeAnonymousLoginInteractor } from '../../di/DependencyProvider'
+import {
+  makeAnonymousLoginInteractor,
+  regionsRepository,
+} from '../../di/DependencyProvider'
 import { ZipCodeConfirmationScreenProps } from '../../navigation'
 import { Colors, Spacing, Typography } from '../../styles'
 import { useTheme } from '../../themes'
@@ -82,7 +84,7 @@ const ZipCodeConfirmationScreen = ({
 
   useEffect(() => {
     const fetchData = () => {
-      RegionsRepository.getInstance()
+      regionsRepository
         .getDepartment(zipCode, 'remote', 'Anonymous')
         .then((department) => {
           setStatefulState(new ViewState.Content(department))

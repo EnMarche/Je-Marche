@@ -6,7 +6,7 @@ import { AuthenticationRepository } from '../data/AuthenticationRepository'
 import NewsRepository from '../data/NewsRepository'
 import { ProfileRepository } from '../data/ProfileRepository'
 import PushRepository from '../data/PushRepository'
-import RegionsRepository from '../data/RegionsRepository'
+import { RegionsRepository } from '../data/RegionsRepository'
 import { ToolsRepository } from '../data/ToolsRepository'
 import { GetPollsInteractorFactory } from './GetPollsInteractorFactory'
 import { GetQuickPollInteractorFactory } from './GetQuickPollInteractorFactory'
@@ -15,6 +15,7 @@ export class GetHomeResourcesInteractorFactory {
   private toolsRepository: ToolsRepository
   private profileRepository: ProfileRepository
   private authenticationRepository: AuthenticationRepository
+  private regionsRepository: RegionsRepository
   private getQuickPollInteractorFactory: GetQuickPollInteractorFactory
   private getPollsInteractorFactory: GetPollsInteractorFactory
 
@@ -22,12 +23,14 @@ export class GetHomeResourcesInteractorFactory {
     toolsRepository: ToolsRepository,
     profileRepository: ProfileRepository,
     authenticationRepository: AuthenticationRepository,
+    regionsRepository: RegionsRepository,
     getQuickPollInteractorFactory: GetQuickPollInteractorFactory,
     getPollsInteractorFactory: GetPollsInteractorFactory,
   ) {
     this.toolsRepository = toolsRepository
     this.profileRepository = profileRepository
     this.authenticationRepository = authenticationRepository
+    this.regionsRepository = regionsRepository
     this.getQuickPollInteractorFactory = getQuickPollInteractorFactory
     this.getPollsInteractorFactory = getPollsInteractorFactory
   }
@@ -36,7 +39,7 @@ export class GetHomeResourcesInteractorFactory {
     return new GetHomeResourcesInteractorImplementation(
       this.authenticationRepository,
       this.profileRepository,
-      RegionsRepository.getInstance(),
+      this.regionsRepository,
       NewsRepository.getInstance(),
       this.getPollsInteractorFactory.makeInstance(),
       this.toolsRepository,
