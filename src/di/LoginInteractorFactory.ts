@@ -5,7 +5,7 @@ import {
 import { AuthenticationRepository } from '../data/AuthenticationRepository'
 import { ProfileRepository } from '../data/ProfileRepository'
 import { RegionsRepository } from '../data/RegionsRepository'
-import ThemeRepository from '../data/ThemeRepository'
+import { ThemeRepository } from '../data/ThemeRepository'
 
 export class LoginInteractorFactory {
   private authenticationRepository: AuthenticationRepository

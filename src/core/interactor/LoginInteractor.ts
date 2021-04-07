@@ -1,7 +1,7 @@
 import { AuthenticationRepository } from '../../data/AuthenticationRepository'
 import { ProfileRepository } from '../../data/ProfileRepository'
 import { RegionsRepository } from '../../data/RegionsRepository'
-import ThemeRepository from '../../data/ThemeRepository'
+import { ThemeRepository } from '../../data/ThemeRepository'
 import { AuthenticationState } from '../entities/AuthenticationState'
 import RegionTheme from '../entities/RegionTheme'
 

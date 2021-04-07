@@ -3,9 +3,7 @@ import { StyleSheet, Text } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { Department } from '../../core/entities/Department'
 import RegionTheme from '../../core/entities/RegionTheme'
-import ThemeRepository from '../../data/ThemeRepository'
-import { profileRepository } from '../../di/DependencyProvider'
-
+import { profileRepository, themeRepository } from '../../di/DependencyProvider'
 import { AnonymousLoginZipCodeScreenProps, Screen } from '../../navigation'
 import { Colors, Spacing, Typography } from '../../styles'
 import { useTheme } from '../../themes'
@@ -29,7 +27,7 @@ const AnonymousLoginZipCodeScreen = ({
 
   const updateTheme = (theme: RegionTheme) => {
     setTheme(theme)
-    ThemeRepository.getInstance().saveRegionTheme(theme)
+    themeRepository.saveRegionTheme(theme)
   }
 
   const onSuccessZipCode = (department: Department) => {

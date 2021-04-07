@@ -20,9 +20,12 @@ import { GenericErrorMapper } from '../shared/ErrorMapper'
 import { useValidateZipCode } from '../shared/useValidateZipCode'
 import { Department } from '../../core/entities/Department'
 import RegionTheme from '../../core/entities/RegionTheme'
-import ThemeRepository from '../../data/ThemeRepository'
 import LoadingOverlay from '../shared/LoadingOverlay'
-import { profileRepository, pushRepository } from '../../di/DependencyProvider'
+import {
+  profileRepository,
+  pushRepository,
+  themeRepository,
+} from '../../di/DependencyProvider'
 
 const ProfileZipCodeScreen: FC<ProfileZipCodeScreenProps> = ({
   navigation,
@@ -39,7 +42,7 @@ const ProfileZipCodeScreen: FC<ProfileZipCodeScreenProps> = ({
 
   const updateTheme = (newTheme: RegionTheme) => {
     setTheme(newTheme)
-    ThemeRepository.getInstance().saveRegionTheme(newTheme)
+    themeRepository.saveRegionTheme(newTheme)
   }
 
   const onSuccessZipCode = async (department: Department) => {

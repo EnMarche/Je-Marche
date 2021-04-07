@@ -31,13 +31,13 @@ import HomeNewsRowContainer from './news/HomeNewsRowContainer'
 import { HomeResources } from '../../core/interactor/GetHomeResourcesInteractor'
 import { useFocusEffect } from '@react-navigation/native'
 import { Region } from '../../core/entities/Region'
-import ThemeRepository from '../../data/ThemeRepository'
 import { ExternalLink } from '../shared/ExternalLink'
 import { ServerTimeoutError } from '../../core/errors'
 import HomeQuickPollRowContainer from './quickPoll/HomeQuickPollRowContainer'
 import {
   makeGetHomeResourcesInteractor,
   makeSaveQuickPollAsAnsweredInteractor,
+  themeRepository,
 } from '../../di/DependencyProvider'
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
@@ -71,7 +71,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
       const updateTheme = (region: Region | undefined) => {
         if (region) {
           setTheme(region.theme)
-          ThemeRepository.getInstance().saveRegionTheme(region.theme)
+          themeRepository.saveRegionTheme(region.theme)
         }
       }
 

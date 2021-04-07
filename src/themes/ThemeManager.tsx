@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import Theme from './Theme'
 import { DefaultTheme, ThemeContext } from '.'
-import ThemeRepository from '../data/ThemeRepository'
 import RegionTheme from '../core/entities/RegionTheme'
 import BlueTheme from './BlueTheme'
 import YellowTheme from './YellowTheme'
@@ -10,6 +9,7 @@ import OrangeTheme from './OrangeTheme'
 import GreenTheme from './GreenTheme'
 import PinkTheme from './PinkTheme'
 import PurpleTheme from './PurpleTheme'
+import { themeRepository } from '../di/DependencyProvider'
 
 type Props = Readonly<{ children: any }>
 
@@ -21,11 +21,9 @@ const ThemeManager: FunctionComponent<Props> = ({ children }) => {
   }
 
   useEffect(() => {
-    ThemeRepository.getInstance()
-      .getRegionTheme()
-      .then((regionTheme) => {
-        setMode(regionTheme)
-      })
+    themeRepository.getRegionTheme().then((regionTheme) => {
+      setMode(regionTheme)
+    })
   }, [])
 
   return (

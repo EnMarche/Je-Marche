@@ -30,7 +30,10 @@ import {
 } from '../data/RegionsRepository'
 import CacheManager from '../data/store/CacheManager'
 import LocalStore from '../data/store/LocalStore'
-import ThemeRepository from '../data/ThemeRepository'
+import {
+  ThemeRepository,
+  ThemeRepositoryImplementation,
+} from '../data/ThemeRepository'
 import {
   ToolsRepository,
   ToolsRepositoryImplementation,
@@ -83,7 +86,9 @@ export const newsRepository: NewsRepository = new NewsRepositoryImplementation(
   apiService,
   cacheManager,
 )
-export const themeRepository = ThemeRepository.getInstance()
+export const themeRepository: ThemeRepository = new ThemeRepositoryImplementation(
+  localStore,
+)
 
 // Interactor Factories
 const getQuickPollInteractorFactory = new GetQuickPollInteractorFactory(
