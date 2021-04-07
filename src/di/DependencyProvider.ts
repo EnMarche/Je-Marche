@@ -1,9 +1,3 @@
-import { AnonymousLoginInteractor } from '../core/interactor/AnonymousLoginInteractor'
-import { GetHomeResourcesInteractor } from '../core/interactor/GetHomeResourcesInteractor'
-import { GetQuickPollInteractor } from '../core/interactor/GetQuickPollInteractor'
-import { GetUserProfileInteractor } from '../core/interactor/GetUserProfileInteractor'
-import { LoginInteractor } from '../core/interactor/LoginInteractor'
-import { SaveQuickPollAsAnsweredInteractor } from '../core/interactor/SaveQuickPollAsAnsweredInteractor'
 import AuthenticationRepository from '../data/AuthenticationRepository'
 import ApiService from '../data/network/ApiService'
 import PollsRepository from '../data/PollsRepository'
@@ -22,90 +16,73 @@ import { GetUserProfileInteractorFactory } from './GetUserProfileInteractorFacto
 import { LoginInteractorFactory } from './LoginInteractorFactory'
 import { SaveQuickPollAsAnsweredInteractorFactory } from './SaveQuickPollAsAnsweredInteractorFactory'
 
-export class DependencyProvider {
-  private static instance: DependencyProvider
-  private getQuickPollInteractorFactory: GetQuickPollInteractorFactory
-  private getHomeResourcesInteractorFactory: GetHomeResourcesInteractorFactory
-  private saveQuickPollAsAnsweredInteractorFactory: SaveQuickPollAsAnsweredInteractorFactory
-  private getPollsInteractorFactory: GetPollsInteractorFactory
-  private getUserProfileInteractorFactory: GetUserProfileInteractorFactory
-  private loginInteractorFactory: LoginInteractorFactory
-  private anonymousLoginInteractorFactory: AnonymousLoginInteractorFactory
+// Repositories
+const toolsRepository = new ToolsRepositoryImplementation()
+const quickPollRepository = new QuickPollRepositoryImplementation(
+  ApiService.getInstance(),
+  CacheManager.getInstance(),
+  LocalStore.getInstance(),
+)
+const pollsRepository = PollsRepository.getInstance()
+const profileRepository = ProfileRepository.getInstance()
+const authenticationRepository = AuthenticationRepository.getInstance()
+const regionsRepository = RegionsRepository.getInstance()
+const themeRepository = ThemeRepository.getInstance()
 
-  private constructor() {
-    const toolsRepository = new ToolsRepositoryImplementation()
-    const quickPollRepository = new QuickPollRepositoryImplementation(
-      ApiService.getInstance(),
-      CacheManager.getInstance(),
-      LocalStore.getInstance(),
-    )
-    const pollsRepository = PollsRepository.getInstance()
-    const profileRepository = ProfileRepository.getInstance()
-    const authenticationRepository = AuthenticationRepository.getInstance()
-    const regionsRepository = RegionsRepository.getInstance()
-    const themeRepository = ThemeRepository.getInstance()
+// Interactor Factories
+const getQuickPollInteractorFactory = new GetQuickPollInteractorFactory(
+  quickPollRepository,
+)
+const getPollsInteractorFactory = new GetPollsInteractorFactory(
+  pollsRepository,
+  profileRepository,
+  authenticationRepository,
+)
+const getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
+  toolsRepository,
+  getQuickPollInteractorFactory,
+  getPollsInteractorFactory,
+)
+const saveQuickPollAsAnsweredInteractorFactory = new SaveQuickPollAsAnsweredInteractorFactory(
+  quickPollRepository,
+)
+const getUserProfileInteractorFactory = new GetUserProfileInteractorFactory(
+  profileRepository,
+  regionsRepository,
+  authenticationRepository,
+)
+const loginInteractorFactory = new LoginInteractorFactory(
+  authenticationRepository,
+  profileRepository,
+  regionsRepository,
+  themeRepository,
+)
+const anonymousLoginInteractorFactory = new AnonymousLoginInteractorFactory(
+  authenticationRepository,
+  profileRepository,
+)
 
-    this.getQuickPollInteractorFactory = new GetQuickPollInteractorFactory(
-      quickPollRepository,
-    )
-    this.getPollsInteractorFactory = new GetPollsInteractorFactory(
-      pollsRepository,
-      profileRepository,
-      authenticationRepository,
-    )
-    this.getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
-      toolsRepository,
-      this.getQuickPollInteractorFactory,
-      this.getPollsInteractorFactory,
-    )
-    this.saveQuickPollAsAnsweredInteractorFactory = new SaveQuickPollAsAnsweredInteractorFactory(
-      quickPollRepository,
-    )
-    this.getUserProfileInteractorFactory = new GetUserProfileInteractorFactory(
-      profileRepository,
-      regionsRepository,
-      authenticationRepository,
-    )
-    this.loginInteractorFactory = new LoginInteractorFactory(
-      authenticationRepository,
-      profileRepository,
-      regionsRepository,
-      themeRepository,
-    )
-    this.anonymousLoginInteractorFactory = new AnonymousLoginInteractorFactory(
-      authenticationRepository,
-      profileRepository,
-    )
-  }
+// Public
+export const makeGetQuickPollInteractor = () => {
+  return getQuickPollInteractorFactory.makeInstance()
+}
 
-  public makeGetQuickPollInteractor(): GetQuickPollInteractor {
-    return this.getQuickPollInteractorFactory.makeInstance()
-  }
+export const makeGetHomeResourcesInteractor = () => {
+  return getHomeResourcesInteractorFactory.makeInstance()
+}
 
-  public makeGetHomeResourcesInteractor(): GetHomeResourcesInteractor {
-    return this.getHomeResourcesInteractorFactory.makeInstance()
-  }
+export const makeSaveQuickPollAsAnsweredInteractor = () => {
+  return saveQuickPollAsAnsweredInteractorFactory.makeInstance()
+}
 
-  public makeSaveQuickPollAsAnsweredInteractor(): SaveQuickPollAsAnsweredInteractor {
-    return this.saveQuickPollAsAnsweredInteractorFactory.makeInstance()
-  }
+export const makeGetUserProfileInteractor = () => {
+  return getUserProfileInteractorFactory.makeInstance()
+}
 
-  public makeGetUserProfileInteractor(): GetUserProfileInteractor {
-    return this.getUserProfileInteractorFactory.makeInstance()
-  }
+export const makeLoginInteractor = () => {
+  return loginInteractorFactory.makeInstance()
+}
 
-  public makeLoginInteractor(): LoginInteractor {
-    return this.loginInteractorFactory.makeInstance()
-  }
-
-  public makeAnonymousLoginInteractor(): AnonymousLoginInteractor {
-    return this.anonymousLoginInteractorFactory.makeInstance()
-  }
-
-  public static sharedInstance(): DependencyProvider {
-    if (!DependencyProvider.instance) {
-      DependencyProvider.instance = new DependencyProvider()
-    }
-    return DependencyProvider.instance
-  }
+export const makeAnonymousLoginInteractor = () => {
+  return anonymousLoginInteractorFactory.makeInstance()
 }

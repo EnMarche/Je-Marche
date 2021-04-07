@@ -35,7 +35,10 @@ import ThemeRepository from '../../data/ThemeRepository'
 import { ExternalLink } from '../shared/ExternalLink'
 import { ServerTimeoutError } from '../../core/errors'
 import HomeQuickPollRowContainer from './quickPoll/HomeQuickPollRowContainer'
-import { DependencyProvider } from '../../di/DependencyProvider'
+import {
+  makeGetHomeResourcesInteractor,
+  makeSaveQuickPollAsAnsweredInteractor,
+} from '../../di/DependencyProvider'
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
   const { theme, setTheme } = useTheme()
@@ -72,7 +75,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
         }
       }
 
-      const getHomeResourcesInteractor = DependencyProvider.sharedInstance().makeGetHomeResourcesInteractor()
+      const getHomeResourcesInteractor = makeGetHomeResourcesInteractor()
 
       setRefreshing(true)
       getHomeResourcesInteractor
@@ -104,7 +107,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
   )
 
   const firstDataFetch = useCallback(() => {
-    const getHomeResourcesInteractor = DependencyProvider.sharedInstance().makeGetHomeResourcesInteractor()
+    const getHomeResourcesInteractor = makeGetHomeResourcesInteractor()
 
     getHomeResourcesInteractor
       .execute('cache')
@@ -166,7 +169,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
       return
     }
 
-    const saveQuickPollAsAnsweredInteractor = DependencyProvider.sharedInstance().makeSaveQuickPollAsAnsweredInteractor()
+    const saveQuickPollAsAnsweredInteractor = makeSaveQuickPollAsAnsweredInteractor()
     const updatedPoll = await saveQuickPollAsAnsweredInteractor.execute({
       quickPollId: pollId,
       answerId: answerId,

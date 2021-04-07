@@ -11,7 +11,7 @@ import LoadingOverlay from '../shared/LoadingOverlay'
 import RegionTheme from '../../core/entities/RegionTheme'
 import { useTheme } from '../../themes'
 import { ExternalLink } from '../shared/ExternalLink'
-import { DependencyProvider } from '../../di/DependencyProvider'
+import { makeLoginInteractor } from '../../di/DependencyProvider'
 
 type Props = Readonly<{
   onSuccess?: () => void
@@ -39,7 +39,7 @@ const LoginScreen: FC<Props> = ({ onSuccess }) => {
     setLoading(true)
     setEmailErrorMessage(undefined)
     setPasswordErrorMessage(undefined)
-    const loginInteractor = DependencyProvider.sharedInstance().makeLoginInteractor()
+    const loginInteractor = makeLoginInteractor()
     loginInteractor
       .login(email, password)
       .then((theme: RegionTheme) => {

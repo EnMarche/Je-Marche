@@ -3,7 +3,7 @@ import { Alert, Image, StyleSheet, Text } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { Department } from '../../core/entities/Department'
 import RegionsRepository from '../../data/RegionsRepository'
-import { DependencyProvider } from '../../di/DependencyProvider'
+import { makeAnonymousLoginInteractor } from '../../di/DependencyProvider'
 import { ZipCodeConfirmationScreenProps } from '../../navigation'
 import { Colors, Spacing, Typography } from '../../styles'
 import { useTheme } from '../../themes'
@@ -45,7 +45,7 @@ const ZipCodeConfirmationContent: FunctionComponent<ContentProps> = ({
 
   const authenticate = () => {
     setIsLoading(true)
-    const anonymousLoginInteractor = DependencyProvider.sharedInstance().makeAnonymousLoginInteractor()
+    const anonymousLoginInteractor = makeAnonymousLoginInteractor()
     anonymousLoginInteractor
       .login(zipCode)
       .catch((error) => displayError(GenericErrorMapper.mapErrorMessage(error)))
