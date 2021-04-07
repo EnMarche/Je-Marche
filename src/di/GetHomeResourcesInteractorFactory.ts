@@ -3,7 +3,7 @@ import {
   GetHomeResourcesInteractorImplementation,
 } from '../core/interactor/GetHomeResourcesInteractor'
 import { AuthenticationRepository } from '../data/AuthenticationRepository'
-import NewsRepository from '../data/NewsRepository'
+import { NewsRepository } from '../data/NewsRepository'
 import { ProfileRepository } from '../data/ProfileRepository'
 import { PushRepository } from '../data/PushRepository'
 import { RegionsRepository } from '../data/RegionsRepository'
@@ -17,6 +17,7 @@ export class GetHomeResourcesInteractorFactory {
   private authenticationRepository: AuthenticationRepository
   private regionsRepository: RegionsRepository
   private pushRepository: PushRepository
+  private newsRepository: NewsRepository
   private getQuickPollInteractorFactory: GetQuickPollInteractorFactory
   private getPollsInteractorFactory: GetPollsInteractorFactory
 
@@ -26,6 +27,7 @@ export class GetHomeResourcesInteractorFactory {
     authenticationRepository: AuthenticationRepository,
     regionsRepository: RegionsRepository,
     pushRepository: PushRepository,
+    newsRepository: NewsRepository,
     getQuickPollInteractorFactory: GetQuickPollInteractorFactory,
     getPollsInteractorFactory: GetPollsInteractorFactory,
   ) {
@@ -34,6 +36,7 @@ export class GetHomeResourcesInteractorFactory {
     this.authenticationRepository = authenticationRepository
     this.regionsRepository = regionsRepository
     this.pushRepository = pushRepository
+    this.newsRepository = newsRepository
     this.getQuickPollInteractorFactory = getQuickPollInteractorFactory
     this.getPollsInteractorFactory = getPollsInteractorFactory
   }
@@ -43,7 +46,7 @@ export class GetHomeResourcesInteractorFactory {
       this.authenticationRepository,
       this.profileRepository,
       this.regionsRepository,
-      NewsRepository.getInstance(),
+      this.newsRepository,
       this.getPollsInteractorFactory.makeInstance(),
       this.toolsRepository,
       this.pushRepository,

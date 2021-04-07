@@ -9,11 +9,19 @@ import { RestNewsResponse } from './restObjects/RestNewsResponse'
 
 const firstPage = 1
 
-class NewsRepository {
-  private static instance: NewsRepository
-  private apiService = ApiService.getInstance()
-  private cacheManager = CacheManager.getInstance()
-  private constructor() {}
+export interface NewsRepository {
+  getLatestNews(zipCode: string, dataSource: DataSource): Promise<Array<News>>
+  getNews(zipCode: string, page: number): Promise<PaginatedResult<Array<News>>>
+}
+
+export class NewsRepositoryImplementation implements NewsRepository {
+  private apiService: ApiService
+  private cacheManager: CacheManager
+
+  constructor(apiService: ApiService, cacheManager: CacheManager) {
+    this.apiService = apiService
+    this.cacheManager = cacheManager
+  }
 
   public async getLatestNews(
     zipCode: string,
@@ -45,13 +53,4 @@ class NewsRepository {
       result: news,
     }
   }
-
-  public static getInstance(): NewsRepository {
-    if (!NewsRepository.instance) {
-      NewsRepository.instance = new NewsRepository()
-    }
-    return NewsRepository.instance
-  }
 }
-
-export default NewsRepository

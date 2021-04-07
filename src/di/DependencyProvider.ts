@@ -5,6 +5,10 @@ import {
 import ApiService from '../data/network/ApiService'
 import OAuthApiService from '../data/network/OAuthApiService'
 import {
+  NewsRepository,
+  NewsRepositoryImplementation,
+} from '../data/NewsRepository'
+import {
   PollsRepository,
   PollsRepositoryImplementation,
 } from '../data/PollsRepository'
@@ -75,6 +79,10 @@ export const regionsRepository: RegionsRepository = new RegionsRepositoryImpleme
   apiService,
   cacheManager,
 )
+export const newsRepository: NewsRepository = new NewsRepositoryImplementation(
+  apiService,
+  cacheManager,
+)
 export const themeRepository = ThemeRepository.getInstance()
 
 // Interactor Factories
@@ -92,6 +100,7 @@ const getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
   authenticationRepository,
   regionsRepository,
   pushRepository,
+  newsRepository,
   getQuickPollInteractorFactory,
   getPollsInteractorFactory,
 )

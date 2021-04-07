@@ -8,8 +8,7 @@ import {
   View,
 } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
-import NewsRepository from '../../data/NewsRepository'
-import { profileRepository } from '../../di/DependencyProvider'
+import { newsRepository, profileRepository } from '../../di/DependencyProvider'
 import { Colors, Spacing } from '../../styles'
 import { useTheme } from '../../themes'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
@@ -34,7 +33,7 @@ const NewsScreen = () => {
   const [isLoadingMore, setLoadingMore] = useState(false)
   const fetchNews = async (page: number) => {
     const zipCode = await profileRepository.getZipCode()
-    return NewsRepository.getInstance().getNews(zipCode, page)
+    return newsRepository.getNews(zipCode, page)
   }
 
   const loadFirstPage = () => {
