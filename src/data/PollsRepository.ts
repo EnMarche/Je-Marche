@@ -5,12 +5,21 @@ import { RestPollResultRequestMapper } from './mapper/RestPollResultRequestMappe
 import { DataSource } from './DataSource'
 import CacheManager from './store/CacheManager'
 
-class PollsRepository {
-  private static instance: PollsRepository
-  private apiService = ApiService.getInstance()
-  private cacheManager = CacheManager.getInstance()
+export interface PollsRepository {
+  getPolls(zipCode?: string, dataSource?: DataSource): Promise<Array<Poll>>
+  getPoll(pollId: number): Promise<Poll>
+  sendPollAnswers(poll: Poll, result: PollResult): Promise<void>
+}
+
+export class PollsRepositoryImplementation implements PollsRepository {
+  private apiService: ApiService
+  private cacheManager: CacheManager
   private memoryCachedPolls: Array<Poll> = []
-  private constructor() {}
+
+  constructor(apiService: ApiService, cacheManager: CacheManager) {
+    this.apiService = apiService
+    this.cacheManager = cacheManager
+  }
 
   public async getPolls(
     zipCode?: string,
@@ -50,13 +59,4 @@ class PollsRepository {
     const restResponse = RestPollResultRequestMapper.map(poll, result)
     await this.apiService.sendPollAnswers(restResponse)
   }
-
-  public static getInstance(): PollsRepository {
-    if (!PollsRepository.instance) {
-      PollsRepository.instance = new PollsRepository()
-    }
-    return PollsRepository.instance
-  }
 }
-
-export default PollsRepository

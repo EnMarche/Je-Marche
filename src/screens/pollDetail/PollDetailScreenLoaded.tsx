@@ -17,12 +17,12 @@ import {
 } from './PollDetailComponentProvider'
 import { PollDetailProgressBarViewModelMapper } from './PollDetailProgressBarViewModelMapper'
 import { PollDetailNavigationButtonsViewModelMapper } from './PollDetailNavigationButtonsViewModelMapper'
-import PollsRepository from '../../data/PollsRepository'
 import LoadingOverlay from '../shared/LoadingOverlay'
 import i18n from '../../utils/i18n'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { PollDetailModalParamList, Screen } from '../../navigation'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
+import { pollsRepository } from '../../di/DependencyProvider'
 
 type Props = Readonly<{
   poll: Poll
@@ -87,7 +87,7 @@ const PollDetailScreenLoaded: FunctionComponent<Props> = ({
 
   const postAnswers = () => {
     setIsLoading(true)
-    PollsRepository.getInstance()
+    pollsRepository
       .sendPollAnswers(poll, provider.getResult())
       .then(() => {
         navigation.replace(Screen.pollDetailSuccess, {

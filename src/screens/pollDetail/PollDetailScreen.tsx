@@ -3,7 +3,6 @@ import { Alert, BackHandler, View, StyleSheet } from 'react-native'
 
 import { PollDetailScreenProps } from '../../navigation'
 import i18n from '../../utils/i18n'
-import PollsRepository from '../../data/PollsRepository'
 import { Poll } from '../../core/entities/Poll'
 import PollDetailScreenLoaded from './PollDetailScreenLoaded'
 import { StatefulView, ViewState } from '../shared/StatefulView'
@@ -15,6 +14,7 @@ import {
 import ModalOverlay from '../shared/ModalOverlay'
 import PollDetailTools from './PollDetailTools'
 import { useTheme } from '../../themes'
+import { pollsRepository } from '../../di/DependencyProvider'
 
 const PollDetailScreen = ({ route, navigation }: PollDetailScreenProps) => {
   const { theme } = useTheme()
@@ -65,7 +65,7 @@ const PollDetailScreen = ({ route, navigation }: PollDetailScreenProps) => {
 
   const fetchPoll = () => {
     setStatefulState(new ViewState.Loading())
-    PollsRepository.getInstance()
+    pollsRepository
       .getPoll(route.params.pollId)
       .then((poll) => {
         navigation.setOptions({

@@ -1,13 +1,22 @@
 import AuthenticationRepository from '../data/AuthenticationRepository'
 import ApiService from '../data/network/ApiService'
-import PollsRepository from '../data/PollsRepository'
+import {
+  PollsRepository,
+  PollsRepositoryImplementation,
+} from '../data/PollsRepository'
 import ProfileRepository from '../data/ProfileRepository'
-import { QuickPollRepositoryImplementation } from '../data/QuickPollRepository'
+import {
+  QuickPollRepository,
+  QuickPollRepositoryImplementation,
+} from '../data/QuickPollRepository'
 import RegionsRepository from '../data/RegionsRepository'
 import CacheManager from '../data/store/CacheManager'
 import LocalStore from '../data/store/LocalStore'
 import ThemeRepository from '../data/ThemeRepository'
-import { ToolsRepositoryImplementation } from '../data/ToolsRepository'
+import {
+  ToolsRepository,
+  ToolsRepositoryImplementation,
+} from '../data/ToolsRepository'
 import { AnonymousLoginInteractorFactory } from './AnonymousLoginInteractorFactory'
 import { GetHomeResourcesInteractorFactory } from './GetHomeResourcesInteractorFactory'
 import { GetPollsInteractorFactory } from './GetPollsInteractorFactory'
@@ -16,18 +25,26 @@ import { GetUserProfileInteractorFactory } from './GetUserProfileInteractorFacto
 import { LoginInteractorFactory } from './LoginInteractorFactory'
 import { SaveQuickPollAsAnsweredInteractorFactory } from './SaveQuickPollAsAnsweredInteractorFactory'
 
+// Helpers
+const apiService = ApiService.getInstance()
+const cacheManager = CacheManager.getInstance()
+const localStore = LocalStore.getInstance()
+
 // Repositories
-const toolsRepository = new ToolsRepositoryImplementation()
-const quickPollRepository = new QuickPollRepositoryImplementation(
-  ApiService.getInstance(),
-  CacheManager.getInstance(),
-  LocalStore.getInstance(),
+const toolsRepository: ToolsRepository = new ToolsRepositoryImplementation()
+const quickPollRepository: QuickPollRepository = new QuickPollRepositoryImplementation(
+  apiService,
+  cacheManager,
+  localStore,
 )
-const pollsRepository = PollsRepository.getInstance()
-const profileRepository = ProfileRepository.getInstance()
-const authenticationRepository = AuthenticationRepository.getInstance()
-const regionsRepository = RegionsRepository.getInstance()
-const themeRepository = ThemeRepository.getInstance()
+export const pollsRepository: PollsRepository = new PollsRepositoryImplementation(
+  apiService,
+  cacheManager,
+)
+export const profileRepository = ProfileRepository.getInstance()
+export const authenticationRepository = AuthenticationRepository.getInstance()
+export const regionsRepository = RegionsRepository.getInstance()
+export const themeRepository = ThemeRepository.getInstance()
 
 // Interactor Factories
 const getQuickPollInteractorFactory = new GetQuickPollInteractorFactory(
