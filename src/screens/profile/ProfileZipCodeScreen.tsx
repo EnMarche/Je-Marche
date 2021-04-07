@@ -18,12 +18,12 @@ import { useTheme } from '../../themes'
 import InputAccessoryClose from '../shared/InputAccessoryClose'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
 import { useValidateZipCode } from '../shared/useValidateZipCode'
-import ProfileRepository from '../../data/ProfileRepository'
 import { Department } from '../../core/entities/Department'
 import RegionTheme from '../../core/entities/RegionTheme'
 import ThemeRepository from '../../data/ThemeRepository'
 import PushRepository from '../../data/PushRepository'
 import LoadingOverlay from '../shared/LoadingOverlay'
+import { profileRepository } from '../../di/DependencyProvider'
 
 const ProfileZipCodeScreen: FC<ProfileZipCodeScreenProps> = ({
   navigation,
@@ -44,7 +44,7 @@ const ProfileZipCodeScreen: FC<ProfileZipCodeScreenProps> = ({
   }
 
   const onSuccessZipCode = async (department: Department) => {
-    await ProfileRepository.getInstance().saveZipCode(zipCode)
+    await profileRepository.saveZipCode(zipCode)
     try {
       await PushRepository.getInstance().subscribeToDepartment(department)
       await PushRepository.getInstance().subscribeToRegion(department.region)

@@ -12,7 +12,7 @@ import i18n from '../../utils/i18n'
 import { NavigationHeaderButton } from '../shared/NavigationHeaderButton'
 import { GOOGLE_PLACES_API_KEY } from '../../Config'
 import { Address } from '../../core/entities/DetailedProfile'
-import ProfileRepository from '../../data/ProfileRepository'
+import { profileRepository } from '../../di/DependencyProvider'
 
 type Props = Readonly<{
   address: Address | undefined
@@ -90,7 +90,7 @@ const LocationPicker: FC<Props> = (props) => {
       let newCity: string | undefined
 
       try {
-        const cityFound = await ProfileRepository.getInstance().getCityFromPostalCode(
+        const cityFound = await profileRepository.getCityFromPostalCode(
           address.postalCode,
         )
         newCity = cityFound ? cityFound : address.city

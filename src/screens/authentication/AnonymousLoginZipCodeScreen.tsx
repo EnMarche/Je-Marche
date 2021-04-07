@@ -3,8 +3,8 @@ import { StyleSheet, Text } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
 import { Department } from '../../core/entities/Department'
 import RegionTheme from '../../core/entities/RegionTheme'
-import ProfileRepository from '../../data/ProfileRepository'
 import ThemeRepository from '../../data/ThemeRepository'
+import { profileRepository } from '../../di/DependencyProvider'
 
 import { AnonymousLoginZipCodeScreenProps, Screen } from '../../navigation'
 import { Colors, Spacing, Typography } from '../../styles'
@@ -33,7 +33,7 @@ const AnonymousLoginZipCodeScreen = ({
   }
 
   const onSuccessZipCode = (department: Department) => {
-    ProfileRepository.getInstance().saveZipCode(zipCode)
+    profileRepository.saveZipCode(zipCode)
     updateTheme(department.region.theme)
     navigation.navigate(Screen.zipCodeConfirmation, {
       zipCode: zipCode,

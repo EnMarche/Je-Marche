@@ -27,7 +27,6 @@ import {
   DetailedProfile,
   FormViolation,
 } from '../../core/entities/DetailedProfile'
-import ProfileRepository from '../../data/ProfileRepository'
 import { GenericErrorMapper } from '../shared/ErrorMapper'
 import { Gender } from '../../core/entities/UserProfile'
 import PhoneNumberInput from './PhoneNumberInput'
@@ -38,6 +37,7 @@ import { useThemedStyles } from '../../themes'
 import Theme from '../../themes/Theme'
 import { PersonalInformationsForm } from '../../core/entities/PersonalInformationsForm'
 import { PersonalInformationsFormMapper } from '../../core/mapper/PersonalInformationsFormMapper'
+import { profileRepository } from '../../di/DependencyProvider'
 
 type ContentProps = Readonly<{
   profileUuid: string
@@ -94,7 +94,7 @@ const PersonalInformationScreenContent: FC<ContentProps> = ({
     }
     setIsLoading(true)
     setErrors([])
-    ProfileRepository.getInstance()
+    profileRepository
       .updateDetailedProfile(profileUuid, form)
       .then(() => navigation.goBack())
       .catch((error) => {
@@ -313,7 +313,7 @@ const PersonalInformationScreen = ({
 
   useEffect(() => {
     const fetchData = () => {
-      ProfileRepository.getInstance()
+      profileRepository
         .getDetailedProfile()
         .then((detailedProfile) => {
           setStatefulState(new ViewState.Content(detailedProfile))

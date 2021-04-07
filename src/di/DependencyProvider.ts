@@ -4,7 +4,10 @@ import {
   PollsRepository,
   PollsRepositoryImplementation,
 } from '../data/PollsRepository'
-import ProfileRepository from '../data/ProfileRepository'
+import {
+  ProfileRepository,
+  ProfileRepositoryImplementation,
+} from '../data/ProfileRepository'
 import {
   QuickPollRepository,
   QuickPollRepositoryImplementation,
@@ -41,7 +44,11 @@ export const pollsRepository: PollsRepository = new PollsRepositoryImplementatio
   apiService,
   cacheManager,
 )
-export const profileRepository = ProfileRepository.getInstance()
+export const profileRepository: ProfileRepository = new ProfileRepositoryImplementation(
+  apiService,
+  localStore,
+  cacheManager,
+)
 export const authenticationRepository = AuthenticationRepository.getInstance()
 export const regionsRepository = RegionsRepository.getInstance()
 export const themeRepository = ThemeRepository.getInstance()
@@ -57,6 +64,7 @@ const getPollsInteractorFactory = new GetPollsInteractorFactory(
 )
 const getHomeResourcesInteractorFactory = new GetHomeResourcesInteractorFactory(
   toolsRepository,
+  profileRepository,
   getQuickPollInteractorFactory,
   getPollsInteractorFactory,
 )

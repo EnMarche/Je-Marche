@@ -3,7 +3,7 @@ import {
   AnonymousLoginInteractorImplementation,
 } from '../core/interactor/AnonymousLoginInteractor'
 import AuthenticationRepository from '../data/AuthenticationRepository'
-import ProfileRepository from '../data/ProfileRepository'
+import { ProfileRepository } from '../data/ProfileRepository'
 
 export class AnonymousLoginInteractorFactory {
   private authenticationRepository: AuthenticationRepository

@@ -3,7 +3,7 @@ import {
   LoginInteractorImplementation,
 } from '../core/interactor/LoginInteractor'
 import AuthenticationRepository from '../data/AuthenticationRepository'
-import ProfileRepository from '../data/ProfileRepository'
+import { ProfileRepository } from '../data/ProfileRepository'
 import RegionsRepository from '../data/RegionsRepository'
 import ThemeRepository from '../data/ThemeRepository'
 

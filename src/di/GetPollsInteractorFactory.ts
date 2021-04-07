@@ -4,7 +4,7 @@ import {
 } from '../core/interactor/GetPollsInteractor'
 import AuthenticationRepository from '../data/AuthenticationRepository'
 import { PollsRepository } from '../data/PollsRepository'
-import ProfileRepository from '../data/ProfileRepository'
+import { ProfileRepository } from '../data/ProfileRepository'
 
 export class GetPollsInteractorFactory {
   private pollsRepository: PollsRepository

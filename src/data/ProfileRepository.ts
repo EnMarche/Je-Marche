@@ -9,12 +9,32 @@ import { DetailedProfile } from '../core/entities/DetailedProfile'
 import { PersonalInformationsForm } from '../core/entities/PersonalInformationsForm'
 import { ProfileUpdateMapper } from './mapper/ProfileUpdateMapper'
 
-class ProfileRepository {
-  private static instance: ProfileRepository
-  private apiService = ApiService.getInstance()
-  private localStore = LocalStore.getInstance()
-  private cacheManager = CacheManager.getInstance()
-  private constructor() {}
+export interface ProfileRepository {
+  getProfile(dataSource: DataSource): Promise<Profile>
+  getDetailedProfile(): Promise<DetailedProfile>
+  updateDetailedProfile(
+    profileUuid: string,
+    newProfile: PersonalInformationsForm,
+  ): Promise<void>
+  getZipCode(): Promise<string>
+  getCityFromPostalCode(postalCode: string): Promise<string | undefined>
+  saveZipCode(zipCode: string): Promise<void>
+}
+
+export class ProfileRepositoryImplementation implements ProfileRepository {
+  private apiService: ApiService
+  private localStore: LocalStore
+  private cacheManager: CacheManager
+
+  constructor(
+    apiService: ApiService,
+    localStore: LocalStore,
+    cacheManager: CacheManager,
+  ) {
+    this.apiService = apiService
+    this.localStore = localStore
+    this.cacheManager = cacheManager
+  }
 
   public async getProfile(dataSource: DataSource = 'remote'): Promise<Profile> {
     const cacheKey = 'profile'
@@ -64,13 +84,4 @@ class ProfileRepository {
   public async saveZipCode(zipCode: string): Promise<void> {
     await this.localStore.storeZipCode(zipCode)
   }
-
-  public static getInstance(): ProfileRepository {
-    if (!ProfileRepository.instance) {
-      ProfileRepository.instance = new ProfileRepository()
-    }
-    return ProfileRepository.instance
-  }
 }
-
-export default ProfileRepository

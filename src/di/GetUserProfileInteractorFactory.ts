@@ -3,7 +3,7 @@ import {
   GetUserProfileInteractorImplementation,
 } from '../core/interactor/GetUserProfileInteractor'
 import AuthenticationRepository from '../data/AuthenticationRepository'
-import ProfileRepository from '../data/ProfileRepository'
+import { ProfileRepository } from '../data/ProfileRepository'
 import RegionsRepository from '../data/RegionsRepository'
 
 export class GetUserProfileInteractorFactory {
