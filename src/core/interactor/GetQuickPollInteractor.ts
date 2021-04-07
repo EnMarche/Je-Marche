@@ -1,9 +1,18 @@
 import { DataSource } from '../../data/DataSource'
-import QuickPollRepository from '../../data/QuickPollRepository'
+import { QuickPollRepository } from '../../data/QuickPollRepository'
 import { StatefulQuickPoll } from '../entities/StatefulQuickPoll'
 
-export class GetQuickPollInteractor {
-  private quickPollRepository = QuickPollRepository.getInstance()
+export interface GetQuickPollInteractor {
+  execute(dataSource: DataSource): Promise<StatefulQuickPoll | undefined>
+}
+
+export class GetQuickPollInteractorImplementation
+  implements GetQuickPollInteractor {
+  private quickPollRepository: QuickPollRepository
+
+  constructor(quickPollRepository: QuickPollRepository) {
+    this.quickPollRepository = quickPollRepository
+  }
 
   public async execute(
     dataSource: DataSource = 'remote',

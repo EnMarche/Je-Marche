@@ -8,13 +8,20 @@ import allSettled from 'promise.allsettled'
 import ProfileRepository from '../../data/ProfileRepository'
 import NewsRepository from '../../data/NewsRepository'
 import RegionsRepository from '../../data/RegionsRepository'
-import ToolsRepository from '../../data/ToolsRepository'
+import {
+  ToolsRepository,
+  ToolsRepositoryImplementation,
+} from '../../data/ToolsRepository'
 import AuthenticationRepository from '../../data/AuthenticationRepository'
 import { GetPollsInteractor } from './GetPollsInteractor'
 import PushRepository from '../../data/PushRepository'
 import { DataSource } from '../../data/DataSource'
-import { GetQuickPollInteractor } from './GetQuickPollInteractor'
+import {
+  GetQuickPollInteractor,
+  useGetQuickPollInteractor,
+} from './GetQuickPollInteractor'
 import { StatefulQuickPoll } from '../entities/StatefulQuickPoll'
+import { useDI } from '../../di/DIContext'
 
 export interface HomeResources {
   zipCode: string
@@ -26,15 +33,55 @@ export interface HomeResources {
   quickPoll?: StatefulQuickPoll
 }
 
-export class GetHomeResourcesInteractor {
-  private authenticationRepository = AuthenticationRepository.getInstance()
-  private profileRepository = ProfileRepository.getInstance()
-  private regionsRepository = RegionsRepository.getInstance()
-  private newsRepository = NewsRepository.getInstance()
-  private getPollsInteractor = new GetPollsInteractor()
-  private toolsRepository = ToolsRepository.getInstance()
-  private pushRepository = PushRepository.getInstance()
-  private getQuickPollInteractor = new GetQuickPollInteractor()
+export interface GetHomeResourcesInteractor {
+  execute(dataSource: DataSource): Promise<HomeResources>
+}
+
+export const useGetHomeResourcesInteractor: () => GetHomeResourcesInteractor = () => {
+  const { toolsRepository } = useDI()
+  const getQuickPollInteractor = useGetQuickPollInteractor()
+  return new GetHomeResourcesInteractorImplementation(
+    AuthenticationRepository.getInstance(),
+    ProfileRepository.getInstance(),
+    RegionsRepository.getInstance(),
+    NewsRepository.getInstance(),
+    new GetPollsInteractor(),
+    toolsRepository,
+    PushRepository.getInstance(),
+    getQuickPollInteractor,
+  )
+}
+
+export class GetHomeResourcesInteractorImplementation
+  implements GetHomeResourcesInteractor {
+  private authenticationRepository: AuthenticationRepository
+  private profileRepository: ProfileRepository
+  private regionsRepository: RegionsRepository
+  private newsRepository: NewsRepository
+  private getPollsInteractor: GetPollsInteractor
+  private toolsRepository: ToolsRepository
+  private pushRepository: PushRepository
+  private getQuickPollInteractor: GetQuickPollInteractor
+
+  constructor(
+    authenticationRepository: AuthenticationRepository = AuthenticationRepository.getInstance(),
+    profileRepository: ProfileRepository = ProfileRepository.getInstance(),
+    regionsRepository: RegionsRepository = RegionsRepository.getInstance(),
+    newsRepository: NewsRepository = NewsRepository.getInstance(),
+    getPollsInteractor: GetPollsInteractor = new GetPollsInteractor(),
+    toolsRepository: ToolsRepository = new ToolsRepositoryImplementation(),
+    pushRepository: PushRepository = PushRepository.getInstance(),
+    getQuickPollInteractor: GetQuickPollInteractor = new GetQuickPollInteractor(),
+  ) {
+    this.authenticationRepository = authenticationRepository
+    this.profileRepository = profileRepository
+    this.regionsRepository = regionsRepository
+    this.newsRepository = newsRepository
+    this.getPollsInteractor = getPollsInteractor
+    this.toolsRepository = toolsRepository
+    this.pushRepository = pushRepository
+    this.getQuickPollInteractor = getQuickPollInteractor
+  }
 
   public async execute(dataSource: DataSource): Promise<HomeResources> {
     const zipCode = await this.profileRepository.getZipCode()

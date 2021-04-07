@@ -1,8 +1,20 @@
-import QuickPollRepository from '../../data/QuickPollRepository'
+import { QuickPollRepository } from '../../data/QuickPollRepository'
 import { StatefulQuickPoll } from '../entities/StatefulQuickPoll'
 
-export class SaveQuickPollAsAnsweredInteractor {
-  private quickPollRepository = QuickPollRepository.getInstance()
+export interface SaveQuickPollAsAnsweredInteractor {
+  execute(request: {
+    quickPollId: string
+    answerId: string
+  }): Promise<StatefulQuickPoll>
+}
+
+export class SaveQuickPollAsAnsweredInteractorImplementation
+  implements SaveQuickPollAsAnsweredInteractor {
+  private quickPollRepository: QuickPollRepository
+
+  constructor(quickPollRepository: QuickPollRepository) {
+    this.quickPollRepository = quickPollRepository
+  }
 
   public async execute(request: {
     quickPollId: string

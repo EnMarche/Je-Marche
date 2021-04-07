@@ -29,8 +29,8 @@ import { HomeViewModel } from './HomeViewModel'
 import { HomeViewModelMapper } from './HomeViewModelMapper'
 import HomeNewsRowContainer from './news/HomeNewsRowContainer'
 import {
-  GetHomeResourcesInteractor,
   HomeResources,
+  useGetHomeResourcesInteractor,
 } from '../../core/interactor/GetHomeResourcesInteractor'
 import { useFocusEffect } from '@react-navigation/native'
 import { Region } from '../../core/entities/Region'
@@ -38,7 +38,7 @@ import ThemeRepository from '../../data/ThemeRepository'
 import { ExternalLink } from '../shared/ExternalLink'
 import { ServerTimeoutError } from '../../core/errors'
 import HomeQuickPollRowContainer from './quickPoll/HomeQuickPollRowContainer'
-import { SaveQuickPollAsAnsweredInteractor } from '../../core/interactor/SaveQuickPollAsAnsweredInteractor'
+import { useSaveQuickPollAsAnsweredInteractor } from '../../core/interactor/SaveQuickPollAsAnsweredInteractor'
 
 const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
   const { theme, setTheme } = useTheme()
@@ -48,6 +48,9 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
   const [isRefreshing, setRefreshing] = useState(true)
   const [initialFetchDone, setInitialFetchDone] = useState(false)
   const [currentResources, setResources] = useState<HomeResources>()
+
+  const getHomeResourcesInteractor = useGetHomeResourcesInteractor()
+  const saveQuickPollAsAnsweredInteractor = useSaveQuickPollAsAnsweredInteractor()
 
   useEffect(() => {
     // Reload view model (and view) when resources model changes
@@ -76,7 +79,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
       }
 
       setRefreshing(true)
-      new GetHomeResourcesInteractor()
+      getHomeResourcesInteractor
         .execute('remote')
         .then((resources) => {
           setResources(resources)
@@ -101,11 +104,11 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
           setRefreshing(false)
         })
     },
-    [setTheme],
+    [setTheme, getHomeResourcesInteractor],
   )
 
   const firstDataFetch = useCallback(() => {
-    new GetHomeResourcesInteractor()
+    getHomeResourcesInteractor
       .execute('cache')
       .then((resources) => {
         setResources(resources)
@@ -117,7 +120,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
       .catch(() => {
         fetchData()
       })
-  }, [fetchData, initialFetchDone])
+  }, [fetchData, initialFetchDone, getHomeResourcesInteractor])
 
   useFocusEffect(firstDataFetch)
 
@@ -164,8 +167,7 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = ({ navigation }) => {
     if (!currentResources) {
       return
     }
-    const interactor = new SaveQuickPollAsAnsweredInteractor()
-    const updatedPoll = await interactor.execute({
+    const updatedPoll = await saveQuickPollAsAnsweredInteractor.execute({
       quickPollId: pollId,
       answerId: answerId,
     })

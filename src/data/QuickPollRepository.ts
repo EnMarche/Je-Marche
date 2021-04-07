@@ -6,12 +6,26 @@ import { RestQuickPollResponse } from './restObjects/RestQuickPollResponse'
 import { QuickPollMapper } from './mapper/QuickPollMapper'
 import LocalStore from './store/LocalStore'
 
-class QuickPollRepository {
-  private static instance: QuickPollRepository
-  private apiService = ApiService.getInstance()
-  private cacheManager = CacheManager.getInstance()
-  private localStore = LocalStore.getInstance()
-  private constructor() {}
+export interface QuickPollRepository {
+  getQuickPolls(dataSource: DataSource): Promise<Array<QuickPoll>>
+  sendQuickPollAnswer(answerId: string): Promise<QuickPoll>
+  saveAnsweredQuickPoll(quickPollId: string): Promise<void>
+  getAnsweredQuickPolls(): Promise<Array<string>>
+}
+export class QuickPollRepositoryImplementation implements QuickPollRepository {
+  private apiService: ApiService
+  private cacheManager: CacheManager
+  private localStore: LocalStore
+
+  constructor(
+    apiService: ApiService,
+    cacheManager: CacheManager,
+    localStore: LocalStore,
+  ) {
+    this.apiService = apiService
+    this.cacheManager = cacheManager
+    this.localStore = localStore
+  }
 
   public async getQuickPolls(
     dataSource: DataSource = 'remote',
@@ -42,13 +56,4 @@ class QuickPollRepository {
   public getAnsweredQuickPolls(): Promise<Array<string>> {
     return this.localStore.getAnsweredQuickPolls()
   }
-
-  public static getInstance(): QuickPollRepository {
-    if (!QuickPollRepository.instance) {
-      QuickPollRepository.instance = new QuickPollRepository()
-    }
-    return QuickPollRepository.instance
-  }
 }
-
-export default QuickPollRepository

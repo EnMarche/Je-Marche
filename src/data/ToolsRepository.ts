@@ -1,9 +1,12 @@
 import { Tool, ToolImage } from '../core/entities/Tool'
 import i18n from '../utils/i18n'
 
-class ToolsRepository {
-  private static instance: ToolsRepository
-  private constructor() {}
+export interface ToolsRepository {
+  getTools(): Promise<Array<Tool>>
+}
+
+export class ToolsRepositoryImplementation implements ToolsRepository {
+  constructor() {}
 
   private tools: Array<Tool> = [
     {
@@ -43,13 +46,4 @@ class ToolsRepository {
       resolve(this.tools)
     })
   }
-
-  public static getInstance(): ToolsRepository {
-    if (!ToolsRepository.instance) {
-      ToolsRepository.instance = new ToolsRepository()
-    }
-    return ToolsRepository.instance
-  }
 }
-
-export default ToolsRepository
