@@ -100,7 +100,7 @@
     "eslint-config-prettier": "6.15.0",
     "eslint-plugin-security": "1.4.0",
     "fs-extra": "8.1.0",
-    "husky": "4.3.0",
+    "husky": "6.0.0",
     "jest": "25.5.4",
     "jetifier": "1.6.6",
     "metro-react-native-babel-preset": "0.64.0",
