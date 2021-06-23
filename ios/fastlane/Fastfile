@@ -62,7 +62,9 @@ private_lane :deploy_to_appcenter do |options|
 	  api_token: ENV["APP_CENTER_API_KEY"],
 	  owner_name: ENV["APP_CENTER_OWNER"],
 	  app_name: ENV["APP_CENTER_NAME"],
-	  ipa: options[:ipa]
+	  ipa: options[:ipa],
+    destinations: "Public,Collaborators",
+    destination_type: "group"
 	)
 end
 

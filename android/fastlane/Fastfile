@@ -41,7 +41,9 @@ private_lane :deploy_apk_to_beta_system do |options|
     owner_name: ENV['APP_CENTER_OWNER'],
     app_name: ENV['APP_CENTER_NAME'],
     release_notes: "Uploaded via Fastlane on #{Time.new}",
-    apk: options[:apk]
+    apk: options[:apk],
+    destinations: "Public,Collaborators",
+    destination_type: "group"
   )
 end
 

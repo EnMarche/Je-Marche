@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../../Config'
 import LocalStore from '../store/LocalStore'
 import AuthenticationRepository from '../AuthenticationRepository'
 import { Mutex } from 'async-mutex'
+import { Credentials } from '../store/Credentials'
 
 const injectAccessTokenHook = async (request: Request) => {
   const credentials = await LocalStore.getInstance().getCredentials()
@@ -26,17 +27,23 @@ const refreshToken = async (options: { request: Request }) => {
     }
     const tokenHasBeenRefreshed = credentials.accessToken !== requestAccessToken
     if (tokenHasBeenRefreshed) {
+      options.request.headers.set(
+        'Authorization',
+        `Bearer ${credentials?.accessToken}`,
+      )
       return
     }
 
     const authenticationRepository = AuthenticationRepository.getInstance()
+    let newCredentials: Credentials
     if (credentials.refreshToken) {
-      await authenticationRepository.refreshToken(credentials.refreshToken)
+      newCredentials = await authenticationRepository.refreshToken(
+        credentials.refreshToken,
+      )
     } else {
       const deviceId = await authenticationRepository.getDeviceId()
-      await authenticationRepository.anonymousLogin(deviceId)
+      newCredentials = await authenticationRepository.anonymousLogin(deviceId)
     }
-    const newCredentials = await LocalStore.getInstance().getCredentials()
     options.request.headers.set(
       'Authorization',
       `Bearer ${newCredentials?.accessToken}`,
