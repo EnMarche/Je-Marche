@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby File.read('.ruby-version').strip
 
 gem 'cocoapods', '1.10.0'
-gem 'fastlane'
+gem 'fastlane', '>= 2.169.0'
 gem 'ccios', '~> 4.0'
 
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')
